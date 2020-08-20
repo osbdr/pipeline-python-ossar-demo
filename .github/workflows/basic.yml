@@ -53,6 +53,22 @@ jobs:
     - name: isort
       run: isort --check .
 
+  ossar:
+    name: Open Source Static Analysis Runner
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: '3.1.201'
+    - name: Run OSSAR
+      uses: github/ossar-action@v1
+      id: ossar
+    - name: Upload results to Security tab
+      uses: github/codeql-action/upload-sarif@v1
+      with:
+        sarif_file: ${{ steps.ossar.outputs.sarifFile }}
+
   test:
     runs-on: ubuntu-latest
     steps:
